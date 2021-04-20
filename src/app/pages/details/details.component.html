@@ -1,0 +1,170 @@
+<div class="container-fluid  px-0 px-md-5 mb-5">
+    <div class="container">
+        <p class="section-title pr-5 mt-5"><span class="pr-2">{{catName}}</span></p>
+        <div class="row mt-5" *ngIf="isAddNew==false && isUpdate==false">
+            <div class="col-12">
+                <span>Search by</span>
+
+                <select formControlName="website" class="form-control mt-3" (change)="changeCat($event)">
+                <option>All</option>
+                
+                <option *ngFor="let cat of categories">{{cat.displayText}}</option>
+            </select>
+            </div>
+            <div class="col-12 text-right mt-5">
+                <mwl-text-input-autocomplete-container>
+                    <input type="text" (change)="keyPress($event)" placeholder="Type here to search..." class="form-control" rows="5" [(ngModel)]="formControlValue">
+
+                </mwl-text-input-autocomplete-container>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-12" (click)="AddNewRow()" *ngIf="isAddNew==false && isUpdate==false && apiRep.loginStatus==true">
+                <button class="mt-3" class="btn btn-dark"><i class="fa fa-plus-circle" aria-hidden="true"></i>  Add New Row</button>
+            </div>
+            <div (click)="back()" class="col-12" *ngIf="isAddNew==true || isUpdate==true">
+                <i style="font-size: 1.5rem;" class="fa fa-long-arrow-left" aria-hidden="true"></i>
+            </div>
+        </div>
+
+
+
+
+        <table class="table mt-4" [ngClass]="CheckDisStatus()">
+            <thead class="thead">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Alternative medicine types</th>
+                    <th scope="col">Complementary and alternative medicine (CAM)</th>
+                    <th scope="col">Full title of clinical trial </th>
+                    <th scope="col">Sponsor name</th>
+                    <th scope="col">Sponsor protocol number/ID</th>
+                    <th scope="col">Population age </th>
+                    <th scope="col">Study type</th>
+                    <th scope="col">Actual enrollment</th>
+                    <th scope="col">Start date</th>
+                    <th scope="col">Phase</th>
+                    <th scope="col">Database Link</th>
+                    <th scope="col">Status</th>
+                    <th scope="col" *ngIf="apiRep.loginStatus==true">Action</th>
+                </tr>
+            </thead>
+            <tbody class="tbody">
+                <tr *ngFor="let item of catFilteredDetails;let i=index">
+                    <td scope="row">{{i+1}}</td>
+                    <td>{{item.alt_medicine_types}}</td>
+                    <td>{{item.cam}}</td>
+                    <td>{{item.title}}</td>
+                    <td>{{item.sponser_name}}</td>
+                    <td>{{item.sponsor_protocol_no}}</td>
+                    <td>{{item.population_age}}</td>
+                    <td>{{item.study_type}}</td>
+                    <td class="text-center">{{item.actual_enrollment}}</td>
+                    <td>{{item.start_date}}</td>
+                    <td>{{item.phase}}</td>
+                    <td> <a [href]=item.db_link target="_blank">View</a></td>
+                    <td>{{item.status_type}}</td>
+                    <td *ngIf="apiRep.loginStatus==true" style="cursor: pointer;">
+                        <i (click)="Edit(item)" class="fa fa-pencil"></i> &nbsp; &nbsp;
+                        <i (click)="confirm(item)" class="fa fa-trash"></i>
+
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+
+        <div class="cotainer-fluid" *ngIf="apiRep.loginStatus==true && (isAddNew==true || isUpdate==true)">
+            <table class="table mt-4">
+                <thead class="thead">
+                    <tr>
+                        <th scope="col">
+                            Add New Row
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+            <div class="form-group">
+                <label>Alternative medicine types</label>
+                <input type="text" [(ngModel)]="alt_medicine_types" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+
+            </div>
+            <div class="form-group">
+                <label>Complementary and alternative medicine (CAM)</label>
+                <input type="text" [(ngModel)]="cam" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>Full title of clinical trial</label>
+                <input type="text" [(ngModel)]="title" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label>Sponsor name</label>
+                <input type="text" [(ngModel)]="sponser_name" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label>Sponsor protocol number/ID</label>
+                <input type="text" [(ngModel)]="sponsor_protocol_no" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>Population Age</label>
+                <input type="text" [(ngModel)]="population_age" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>Study Type</label>
+                <div class="row">
+                    <div class="col-3" *ngFor="let item of apiRep.studyTypes;let i=index">
+                        <button (click)="SelectStudyType(item,i)" [ngClass]="changeClass(i)">{{item.value}}</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Actual enrollment</label>
+                <input type="text" [(ngModel)]="actual_enrollment" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label>Start Date: </label>
+                <!-- [(ngModel)]="selectedDate" -->
+                <!-- <dp-date-picker [(ngModel)]="start_date" [config]="datePickerConfig"></dp-date-picker> -->
+                <dp-date-picker [(ngModel)]="start_date" [config]='config' #datePicker>
+                </dp-date-picker>
+            </div>
+
+            <div class="form-group">
+                <label>Phase</label>
+                <input type="text" [(ngModel)]="phase" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>Database Link</label>
+                <input type="text" [(ngModel)]="db_link" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>Select Status</label>
+                <div class="row">
+                    <div class="col-3" *ngFor="let item of apiRep.statusTypes;let i=index">
+                        <button (click)="SelectStatusType(item,i)" [ngClass]="changeStatusClass(i)">{{item.value}}</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row  mt-5" style="border-top: 1px solid #ccc;" *ngIf="isClicked==0">
+                <div class="col-6 text-center mt-3">
+                    <button type="submit" [disabled]=validateForm() (click)="SaveDetails()" class="btn btn-primary">Submit</button>
+                </div>
+                <div class="col-6 text-left mt-3">
+                    <button (click)="back()" class="btn btn-dark">Cancel</button>
+                </div>
+            </div>
+
+            <div class="row mt-3" *ngIf="isClicked==1">
+                <div class="col-12 text-center ">
+                    <img style="width: 5rem;" src="../../../assets/img/spinner.svg">
+                    <p>Please wait..</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

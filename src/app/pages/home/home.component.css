@@ -1,0 +1,25 @@
+#container1 {
+    height: 100%;
+    width: 100%;
+    border: 1px solid green;
+    overflow: hidden;
+    position: relative;
+}
+
+#container2 {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    /* exact value is given through JavaScript */
+    border: 1px solid blue;
+    overflow: auto;
+}
+
+html,
+body {
+    height: 99%;
+    border: 1px solid red;
+    overflow: hidden;
+}

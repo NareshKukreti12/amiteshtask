@@ -1,0 +1,21 @@
+.prod_cat-trans {
+    border: 1px solid rgb(60, 153, 207);
+    background-color: transparent;
+    color: #565656;
+    border-radius: 5px;
+}
+
+.prod_cat {
+    border: 1px solid rgb(60, 153, 207);
+    background-color: rgb(60, 153, 207);
+    color: #fffdfd;
+    border-radius: 5px;
+}
+
+.display-block {
+    display: block;
+}
+
+.display-none {
+    display: none;
+}
